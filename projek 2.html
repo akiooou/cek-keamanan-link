@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Keamanan Link Yuk</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f6f9;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 95%;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #hasil {
+            margin-top: 20px;
+            padding: 15px;
+            display: none;
+        }
+
+        .aman {
+            background-color: #d4edda;
+            color: green;
+        }
+
+        .waspada {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .bahaya {
+            background-color: #f8d7da;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>🛡️ Cek Keamanan Link</h2>
+
+        <p>
+            Masukkan link untuk mengetahui
+            apakah terdapat indikasi penipuan atau ketidakamanan link.
+        </p>
+
+        <input type="text" id="link" placeholder="Masukkan link di sini">
+
+        <button onclick="periksaLink()">Analisis Link</button>
+
+        <div id="hasil"></div>
+
+    </div>
+
+
+    <script>
+
+        function periksaLink() {
+
+            // Mengambil link yang dimasukkan pengguna
+            let link = document.getElementById("link").value;
+
+            // Mengubah huruf menjadi kecil
+            link = link.toLowerCase();
+
+            // Menghapus spasi di awal dan akhir
+            link = link.trim();
+
+            let hasil = document.getElementById("hasil");
+
+            // Mengecek apakah input kosong
+            if (link == "") {
+                alert("Masukkan link terlebih dahulu!");
+                return;
+            }
+
+            // Daftar kata yang mencurigakan
+            let kataBahaya = [
+                "dana-kaget",
+                "undian",
+                "giveaway",
+                "berhadiah",
+                "bca-",
+                "bri-",
+                "mandiri-",
+                "shopee-",
+                "tokopedia-",
+                "login-",
+                "verifikasi",
+                "pulsa-gratis"
+            ];
+
+            // Daftar ekstensi domain mencurigakan
+            let domainBahaya = [
+                ".xyz",
+                ".top",
+                ".tk",
+                ".ml",
+                ".ga",
+                ".cf",
+                ".live",
+                ".site",
+                ".online",
+                ".icu",
+                ".buzz"
+            ];
+
+            let skor = 0;
+            let alasan = "";
+
+            // Mengecek penggunaan HTTP
+            if (link.startsWith("http://")) {
+                skor = skor + 1;
+                alasan = alasan + "Menggunakan HTTP. ";
+            }
+
+            // Mengecek kata-kata mencurigakan
+            for (let i = 0; i < kataBahaya.length; i++) {
+
+                if (link.includes(kataBahaya[i])) {
+                    skor = skor + 2;
+                    alasan = alasan + "Mengandung kata " + kataBahaya[i] + ". ";
+                }
+
+            }
+
+            // Mengecek ekstensi domain
+            for (let i = 0; i < domainBahaya.length; i++) {
+
+                if (link.includes(domainBahaya[i])) {
+                    skor = skor + 2;
+                    alasan = alasan + "Menggunakan domain " + domainBahaya[i] + ". ";
+                }
+
+            }
+
+            // Menampilkan hasil pemeriksaan
+            hasil.style.display = "block";
+
+            if (skor >= 3) {
+
+                hasil.className = "bahaya";
+
+                hasil.innerHTML =
+                    "<b>🚨 INDIKASI PENIPUAN!</b><br>" +
+                    alasan +
+                    "Sebaiknya jangan membuka link tersebut.";
+
+            } else if (skor > 0) {
+
+                hasil.className = "waspada";
+
+                hasil.innerHTML =
+                    "<b>⚠️ WASPADA!</b><br>" +
+                    alasan +
+                    "Tetap berhati-hati.";
+
+            } else {
+
+                hasil.className = "aman";
+
+                hasil.innerHTML =
+                    "<b>🟢 BELUM TERINDIKASI BAHAYA</b><br>" +
+                    "Tidak ditemukan ciri mencurigakan berdasarkan pemeriksaan sederhana.";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
